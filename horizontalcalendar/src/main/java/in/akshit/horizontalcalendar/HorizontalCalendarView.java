@@ -27,7 +27,7 @@ public class HorizontalCalendarView extends LinearLayout {
     RecyclerView recyclerView;
     HorizontalCalendarAdapter adapter;
 
-    public interface OnCalendarListener{
+    public interface OnCalendarListener {
         void onDateSelected(HorizontalCalendarModel model);
     }
 
@@ -56,13 +56,12 @@ public class HorizontalCalendarView extends LinearLayout {
 
         TextView textView = view.findViewById(R.id.text);
         recyclerView = view.findViewById(R.id.re);
-        recyclerView.setHasFixedSize(true);
         view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        if(attributeSet!=null) {
+        if (attributeSet != null) {
             TypedArray attrs = context.obtainStyledAttributes(attributeSet, R.styleable.HorizontalCalendarView);
             textView.setText(attrs.getString(R.styleable.HorizontalCalendarView_text));
             attrs.recycle();
-        }else{
+        } else {
             textView.setText("No Text Provided");
         }
         textView.setVisibility(GONE);
@@ -70,7 +69,7 @@ public class HorizontalCalendarView extends LinearLayout {
         addView(view);
     }
 
-    public void setUpCalendar(long start, long end, ArrayList<String> dates, OnCalendarListener onCalendarListener){
+    public void setUpCalendar(long start, long end, ArrayList<String> dates, OnCalendarListener onCalendarListener) {
 
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(start);
@@ -80,23 +79,23 @@ public class HorizontalCalendarView extends LinearLayout {
         long today = Tools.getTimeInMillis(Tools.getFormattedDateToday());
 
         long current = start;
-        int i=0;
+        int i = 0;
         int pos = 0;
-        while(current<end){
+        while (current < end) {
 
             Calendar c1 = Calendar.getInstance();
             c1.setTimeInMillis(start);
-            c1.add(Calendar.DATE,i);
+            c1.add(Calendar.DATE, i);
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-            if(sdf.format(c1.getTimeInMillis()).equalsIgnoreCase(sdf.format(today))){
-                pos =i;
-                Log.d("Postion",pos+"");
+            if (sdf.format(c1.getTimeInMillis()).equalsIgnoreCase(sdf.format(today))) {
+                pos = i;
+                Log.d("Postion", pos + "");
             }
 
             HorizontalCalendarModel model = new HorizontalCalendarModel(c1.getTimeInMillis());
-            if(dates.contains(sdf.format(c1.getTimeInMillis()))){
+            if (dates.contains(sdf.format(c1.getTimeInMillis()))) {
                 model.setStatus(1);
             }
 
@@ -104,26 +103,25 @@ public class HorizontalCalendarView extends LinearLayout {
 
             current = c1.getTimeInMillis();
             i++;
-            Log.d("Setting data",sdf.format(c1.getTimeInMillis()));
+            Log.d("Setting data", sdf.format(c1.getTimeInMillis()));
         }
 
-        adapter = new HorizontalCalendarAdapter(list,context);
+        adapter = new HorizontalCalendarAdapter(list);
         adapter.setOnCalendarListener(onCalendarListener);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context,RecyclerView.HORIZONTAL,false);
-//        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(context,7,RecyclerView.VERTICAL,false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false);
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
         adapter.notifyDataSetChanged();
-
         recyclerView.scrollToPosition(pos);
     }
 
-    public void updateAdapter(HorizontalCalendarModel model){
-        if(adapter != null){
+    public void updateAdapter(HorizontalCalendarModel model) {
+        if (adapter != null) {
             adapter.updateSelected(model);
         }
     }

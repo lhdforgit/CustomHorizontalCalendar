@@ -7,27 +7,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 class HorizontalCalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<HorizontalCalendarModel> list;
-    private Context mCtx;
-    private int select = 0;
     private HorizontalCalendarView.OnCalendarListener onCalendarListener;
 
     void setOnCalendarListener(HorizontalCalendarView.OnCalendarListener onCalendarListener) {
         this.onCalendarListener = onCalendarListener;
     }
 
-    HorizontalCalendarAdapter(ArrayList<HorizontalCalendarModel> list, Context mCtx) {
+    HorizontalCalendarAdapter(ArrayList<HorizontalCalendarModel> list) {
         this.list = list;
-        this.mCtx = mCtx;
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull
+    public MyViewHolder onCreateViewHolder( @NonNull ViewGroup parent, int viewType) {
         View itemView;
         if (viewType == R.layout.horizontal_calendar_item_select) {
             itemView = LayoutInflater.from(parent.getContext())
@@ -40,7 +40,7 @@ class HorizontalCalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull  RecyclerView.ViewHolder holder, final int position) {
         final HorizontalCalendarModel model = list.get(position);
         ((MyViewHolder) holder).bind(model);
     }
@@ -60,7 +60,7 @@ class HorizontalCalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return R.layout.horizontal_calendar_item;
     }
 
-    public void updateSelected(final HorizontalCalendarModel model) {
+    void updateSelected(final HorizontalCalendarModel model) {
         int index = list.indexOf(model);
         for (int i = 0; i < list.size(); i++) {
             if (i == index) {
@@ -89,7 +89,7 @@ class HorizontalCalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             day_tv = view.findViewById(R.id.day_tv);
         }
 
-        public void bind(final HorizontalCalendarModel model) {
+        void bind(final HorizontalCalendarModel model) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(model.getTimeinmilli());
 
